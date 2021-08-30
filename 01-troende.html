@@ -23,6 +23,12 @@
   </head>
 
   <body>
+    <nav>
+      <button data-troende="alle" class="valgt">Alle</button>
+      <button data-troende="ja">Troende</button>
+      <button data-troende="nej">Ikke troende</button>
+      <button data-troende="tvivler">Tvivler</button>
+    </nav>
     <section class="data-container"></section>
 
     <template>
@@ -45,6 +51,7 @@
       };
       function start() {
         let person;
+        let filter = "ja";
 
         async function hentdata() {
           const respons = await fetch(url, options);
@@ -58,14 +65,16 @@
           const personTemplate = document.querySelector("template");
 
           person.forEach((personer) => {
-            let klon = personTemplate.cloneNode(true).content;
-            klon.querySelector("h1").textContent =
-              "Navn: " + personer.fornavn + " " + personer.efternavn;
-            klon.querySelector(".dato").textContent =
-              "Fødselsdato: " + personer.fødselsdag;
-            klon.querySelector(".titel").textContent = personer.titel;
-            klon.querySelector("img").src = "billeder/" + personer.billede;
-            container.appendChild(klon);
+            if (filter == personer.troende) {
+              let klon = personTemplate.cloneNode(true).content;
+              klon.querySelector("h1").textContent =
+                "Navn: " + personer.fornavn + " " + personer.efternavn;
+              klon.querySelector(".dato").textContent =
+                "Fødselsdato: " + personer.fødselsdag;
+              klon.querySelector(".titel").textContent = personer.titel;
+              klon.querySelector("img").src = "billeder/" + personer.billede;
+              container.appendChild(klon);
+            }
           });
         }
         hentdata();
